@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Filmes e Séries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-film"></i>
+                <span>CineGu</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="movies">
+                    <i class="fa-solid fa-clapperboard"></i>
+                    <span>Meus Filmes</span>
+                </a>
+                <a href="#" class="nav-item" data-view="series">
+                    <i class="fa-solid fa-tv"></i>
+                    <span>Minhas Séries</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-item" data-view="settings">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Backup & Dados</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-primary btn-add-new" id="btn-open-add-modal">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Adicionar Novo</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="local-search" placeholder="Buscar na minha lista...">
+                    </div>
+                </div>
+            </header>
+
+            <div class="view-container" id="view-dashboard">
+                <!-- Dashboard Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon movie-icon"><i class="fa-solid fa-clapperboard"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-movies">0</h3>
+                            <p>Filmes Assistidos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon series-icon"><i class="fa-solid fa-tv"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-series">0</h3>
+                            <p>Séries Assistidas</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon rating-icon"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-avg-rating">0.0</h3>
+                            <p>Média de Avaliação</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-summary glass-panel">
+                    <div class="status-summary-group">
+                        <div class="status-summary-title">Filmes por status</div>
+                        <div class="status-summary-items">
+                            <span class="status-chip status-chip-completed">
+                                Assistidos: <span id="stat-movies-completed">0</span>
+                            </span>
+                            <span class="status-chip status-chip-watching">
+                                Assistindo: <span id="stat-movies-watching">0</span>
+                            </span>
+                            <span class="status-chip status-chip-plan">
+                                Quero assistir: <span id="stat-movies-plan_to_watch">0</span>
+                            </span>
+                            <span class="status-chip status-chip-dropped">
+                                Desisti: <span id="stat-movies-dropped">0</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="status-summary-group">
+                        <div class="status-summary-title">Séries por status</div>
+                        <div class="status-summary-items">
+                            <span class="status-chip status-chip-completed">
+                                Assistidas: <span id="stat-series-completed">0</span>
+                            </span>
+                            <span class="status-chip status-chip-watching">
+                                Assistindo: <span id="stat-series-watching">0</span>
+                            </span>
+                            <span class="status-chip status-chip-plan">
+                                Quero assistir: <span id="stat-series-plan_to_watch">0</span>
+                            </span>
+                            <span class="status-chip status-chip-dropped">
+                                Desisti: <span id="stat-series-dropped">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Additions -->
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Sua Lista Completa</h2>
+                    <div class="filter-group"
+                        style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <label style="margin-bottom: 0; margin-right: 8px;">Tipo:</label>
+                        <select id="dash-filter-type" style="width: auto; padding: 6px 12px; margin-right: 12px;">
+                            <option value="all">Todos</option>
+                            <option value="movie">Filmes</option>
+                            <option value="series">Séries</option>
+                        </select>
+
+                        <label style="margin-bottom: 0; margin-right: 8px;">Status:</label>
+                        <select id="dash-filter-status" style="width: auto; padding: 6px 12px;">
+                            <option value="all">Todos</option>
+                            <option value="completed">Assistidos</option>
+                            <option value="watching">Assistindo</option>
+                            <option value="plan_to_watch">Quero Assistir</option>
+                            <option value="dropped">Desisti</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="media-grid" id="dashboard-recent-grid">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- List View: Movies & Series -->
+            <div class="view-container hidden" id="view-list">
+                <div class="filters-bar glass-panel">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="filter-status">
+                            <option value="all">Todos</option>
+                            <option value="completed">Assistido</option>
+                            <option value="watching">Assistindo</option>
+                            <option value="plan_to_watch">Quero Assistir</option>
+                            <option value="dropped">Desisti</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Ordenar por:</label>
+                        <select id="filter-sort">
+                            <option value="date_desc">Adicionado (Mais recentes)</option>
+                            <option value="date_asc">Adicionado (Mais antigos)</option>
+                            <option value="rating_desc">Melhor Avaliação</option>
+                            <option value="title_asc">Título (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="media-grid" id="list-grid">
+                    <!-- Cards injected here dynamically -->
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <p>Nenhum item encontrado.</p>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div class="view-container hidden" id="view-settings">
+                <div class="settings-card glass-panel" style="margin-bottom: 24px;">
+                    <h2><i class="fa-solid fa-cloud-arrow-down"></i> Exportar Dados</h2>
+                    <p class="settings-desc">Baixe sua lista de filmes e séries para ter um arquivo de segurança no seu
+                        computador.</p>
+
+                    <div style="display: flex; gap: 16px; margin-bottom: 8px;">
+                        <button class="btn btn-primary" id="btn-export-json"><i class="fa-solid fa-file-code"></i>
+                            Baixar JSON (Recomendado)</button>
+                        <button class="btn btn-secondary" id="btn-export-csv"><i class="fa-solid fa-file-csv"></i>
+                            Baixar CSV (Excel)</button>
+                    </div>
+                </div>
+
+                <div class="settings-card glass-panel" style="margin-bottom: 24px;">
+                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> Restaurar Backup</h2>
+                    <p class="settings-desc">Recupere sua lista usando um arquivo JSON salvo anteriormente.</p>
+
+                    <div class="form-group">
+                        <input type="file" id="file-import-json" accept=".json"
+                            style="background: rgba(0,0,0,0.2); padding: 8px;">
+                    </div>
+                    <button class="btn btn-primary" id="btn-import-json"><i class="fa-solid fa-upload"></i> Restaurar
+                        Agora</button>
+                </div>
+
+                <div class="settings-card glass-panel" style="margin-bottom: 24px;">
+                    <h2><i class="fa-solid fa-key"></i> Integração TMDB (Filmes & Séries)</h2>
+                    <p class="settings-desc">Para buscar dados e capas pelo código IMDB automaticamente, insira uma
+                        Chave (API Key) v3 Auth do site <strong>The Movie Database (TMDB)</strong>.</p>
+                    <div class="form-group">
+                        <label>Sua Chave de API</label>
+                        <input type="password" id="tmdb-api-key" placeholder="Cole sua API Key aqui...">
+                        <small style="display: block; margin-top: 8px; color: var(--text-secondary);">
+                            Crie sua conta e gere uma chave gratuita em: <a
+                                href="https://www.themoviedb.org/settings/api" target="_blank"
+                                style="color: var(--primary-color);">themoviedb.org</a>
+                        </small>
+                    </div>
+                    <button class="btn btn-primary" id="btn-save-api-key"><i class="fa-solid fa-check"></i> Salvar
+                        Chave</button>
+                </div>
+
+                <div class="settings-card glass-panel danger-zone">
+                    <h2><i class="fa-solid fa-triangle-exclamation"></i> Gerenciamento de Dados</h2>
+                    <p class="settings-desc">Seus dados são salvos localmente no seu navegador. Cuidado ao apagar.</p>
+                    <button class="btn btn-danger" id="btn-clear-data"><i class="fa-solid fa-trash"></i> Apagar Todos os
+                        Dados</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Adicionar Título</h2>
+                <button class="btn-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Form Phase -->
+                <div id="modal-form-phase">
+                    <form id="media-form">
+                        <input type="hidden" id="form-id">
+
+                        <div class="form-group glass-panel"
+                            style="padding: 16px; margin-bottom: 24px; border: 1px dashed var(--primary-color); background: rgba(99, 102, 241, 0.05);">
+                            <label><i class="fa-brands fa-imdb"
+                                    style="color: #f5c518; font-size: 18px; vertical-align: middle;"></i> Código IMDB
+                                (Autopreencher dados)</label>
+                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                <input type="text" id="api-search-input" placeholder="Ex: tt4154664" style="flex:1;">
+                                <button type="button" class="btn btn-primary" id="btn-api-search"
+                                    style="white-space: nowrap;"><i class="fa-solid fa-magnifying-glass"></i> Buscar
+                                    Dados</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-cover-preview" id="form-cover-preview">
+                                <span>Sem Capa</span>
+                            </div>
+                            <div class="form-main-fields">
+                                <div class="form-group">
+                                    <label>Título</label>
+                                    <input type="text" id="form-title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo</label>
+                                    <div class="radio-group">
+                                        <label><input type="radio" name="form-type" value="movie" checked> Filme</label>
+                                        <label><input type="radio" name="form-type" value="series"> Série</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>URL da Capa (Imagem)</label>
+                                    <input type="url" id="form-poster" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="series-seasons-row" style="display: none; margin-top: 16px;">
+                            <div class="form-group glass-panel"
+                                style="padding: 12px; border: 1px solid var(--border-color);">
+                                <label style="margin-bottom: 8px;"><i class="fa-solid fa-list-check"
+                                        style="color: var(--primary-color);"></i> Progresso de Temporadas</label>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <label style="font-size: 11px; opacity: 0.7;">Assistidas</label>
+                                        <div style="display: flex; gap: 4px;">
+                                            <button type="button" class="btn btn-secondary btn-season-control"
+                                                data-action="dec" data-target="form-seasons-watched"
+                                                style="padding: 4px 8px; flex: 0 0 auto;">-</button>
+                                            <input type="number" id="form-seasons-watched" min="0" value="0"
+                                                style="width: 100%; text-align: center; padding: 4px;">
+                                            <button type="button" class="btn btn-secondary btn-season-control"
+                                                data-action="inc" data-target="form-seasons-watched"
+                                                style="padding: 4px 8px; flex: 0 0 auto;">+</button>
+                                        </div>
+                                    </div>
+                                    <div style="font-weight: bold; padding-top: 18px;">/</div>
+                                    <div style="flex: 1;">
+                                        <label style="font-size: 11px; opacity: 0.7;">Total</label>
+                                        <div style="display: flex; gap: 4px;">
+                                            <button type="button" class="btn btn-secondary btn-season-control"
+                                                data-action="dec" data-target="form-seasons-total"
+                                                style="padding: 4px 8px; flex: 0 0 auto;">-</button>
+                                            <input type="number" id="form-seasons-total" min="1" value="1"
+                                                style="width: 100%; text-align: center; padding: 4px;">
+                                            <button type="button" class="btn btn-secondary btn-season-control"
+                                                data-action="inc" data-target="form-seasons-total"
+                                                style="padding: 4px 8px; flex: 0 0 auto;">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label>Status</label>
+                            <select id="form-status" required>
+                                <option value="completed">Assistido / Concluído</option>
+                                <option value="watching">Assistindo Atualmente</option>
+                                <option value="plan_to_watch">Quero Assistir</option>
+                                <option value="dropped">Desisti</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Avaliação</label>
+                            <div class="star-rating" id="form-rating-stars">
+                                <i class="fa-solid fa-star" data-val="1"></i>
+                                <i class="fa-solid fa-star" data-val="2"></i>
+                                <i class="fa-solid fa-star" data-val="3"></i>
+                                <i class="fa-solid fa-star" data-val="4"></i>
+                                <i class="fa-solid fa-star" data-val="5"></i>
+                            </div>
+                            <input type="hidden" id="form-rating" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sua Análise / Comentários</label>
+                            <textarea id="form-review" rows="3" placeholder="O que você achou?"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                id="btn-close-modal-inline">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btn-save-media">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
