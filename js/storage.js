@@ -52,6 +52,15 @@ class StorageManager {
     }
 
     addItem(item) {
+        // Check for duplicates (same title and type)
+        const isDuplicate = this.data.items.some(
+            i => i.title.toLowerCase().trim() === item.title.toLowerCase().trim() && i.type === item.type
+        );
+
+        if (isDuplicate) {
+            throw new Error(`O ${item.type === 'movie' ? 'filme' : 'série'} "${item.title}" já está na sua lista!`);
+        }
+
         if (!item.id) item.id = 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         item.dateAdded = new Date().toISOString();
         this.data.items.push(item);

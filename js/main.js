@@ -122,8 +122,14 @@ class AppMain {
             items = items.filter(i => i.status === statusFilter);
         }
 
+        // Fix: Local Search filter in Dashboard
+        const searchTerm = document.getElementById('local-search').value.toLowerCase();
+        if (searchTerm) {
+            items = items.filter(i => i.title.toLowerCase().includes(searchTerm));
+        }
+
         items.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
-        const recentItems = items.slice(0, 10); // Show max 10
+        const recentItems = items.slice(0, 100); // Increased from 10 to 100
 
         const grid = document.getElementById('dashboard-recent-grid');
         grid.innerHTML = '';
@@ -179,6 +185,7 @@ class AppMain {
         document.getElementById('form-id').value = '';
         document.getElementById('form-rating').value = '0';
         this.updateStarVisuals(0);
+        document.getElementById('form-year').value = '';
         document.getElementById('form-cover-preview').innerHTML = '<span>Sem Capa</span>';
         document.getElementById('series-seasons-row').style.display = 'none';
         document.getElementById('form-seasons-watched').value = '0';
@@ -190,6 +197,7 @@ class AppMain {
             document.getElementById('form-title').value = apiData.title;
             // set radio
             document.querySelector(`input[name="form-type"][value="${apiData.type}"]`).checked = true;
+            document.getElementById('form-year').value = apiData.year || '';
             document.getElementById('form-poster').value = apiData.poster;
             if (apiData.poster) {
                 document.getElementById('form-cover-preview').innerHTML = `<img src="${apiData.poster}">`;
@@ -246,11 +254,12 @@ class AppMain {
         const status = document.getElementById('form-status').value;
         const rating = document.getElementById('form-rating').value;
         const review = document.getElementById('form-review').value;
+        const year = document.getElementById('form-year').value;
         const seasonsWatched = document.getElementById('form-seasons-watched').value;
         const seasonsTotal = document.getElementById('form-seasons-total').value;
 
         const data = {
-            title, type, poster, status, rating, review,
+            title, type, poster, status, rating, review, year,
             seasonsWatched: type === 'series' ? seasonsWatched : 0,
             seasonsTotal: type === 'series' ? seasonsTotal : 0
         };
@@ -259,8 +268,13 @@ class AppMain {
             this.storage.updateItem(id, data);
             this.ui.showToast('Item atualizado com sucesso!');
         } else {
-            this.storage.addItem(data);
-            this.ui.showToast('Item adicionado com sucesso!');
+            try {
+                this.storage.addItem(data);
+                this.ui.showToast('Item adicionado com sucesso!');
+            } catch (error) {
+                this.ui.showToast(error.message, true);
+                return; // Don't close modal if error
+            }
         }
 
         this.ui.closeModal();
@@ -277,6 +291,7 @@ class AppMain {
         document.getElementById('form-status').value = item.status;
         document.getElementById('form-rating').value = item.rating || 0;
         this.updateStarVisuals(item.rating || 0);
+        document.getElementById('form-year').value = item.year || '';
         document.getElementById('form-review').value = item.review || '';
 
         if (item.poster) {

@@ -162,7 +162,7 @@ class UIManager {
             <img class="media-poster" src="${posterUrl}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/200x300?text=Sem+Capa'">
             <div class="status-badge ${statusClass}">${statusLabel}</div>
             <div class="media-info">
-                <div class="media-title" title="${item.title}">${item.title}</div>
+                <div class="media-title" title="${item.title}">${item.title} ${item.year ? `<span style="font-size: 0.85em; opacity: 0.7; font-weight: 400;">(${item.year})</span>` : ''}</div>
                 <div class="media-meta">
                     <span style="text-transform: capitalize;">
                         ${item.type === 'movie' ? 'Filme' : `Série (${item.seasonsWatched || 0}/${item.seasonsTotal || 1})`}

@@ -67,11 +67,16 @@ class ApiService {
                 localizedTitle = `${localizedTitle} (${originalTitle})`;
             }
 
+            // Extract year
+            const dateStr = isMovie ? item.release_date : item.first_air_date;
+            const year = dateStr ? dateStr.substring(0, 4) : '';
+
             return {
                 type: type,
                 title: localizedTitle,
                 poster: item.poster_path ? `${this.imageBaseUrl}${item.poster_path}` : '',
-                totalSeasons: totalSeasons
+                totalSeasons: totalSeasons,
+                year: year
             };
 
         } catch (error) {

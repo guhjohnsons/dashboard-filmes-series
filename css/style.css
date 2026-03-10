@@ -714,6 +714,20 @@ input[type=number] {
     object-fit: cover;
 }
 
+.form-row-compact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
 .form-main-fields {
     flex: 1;
 }
