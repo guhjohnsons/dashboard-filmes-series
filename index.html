@@ -21,7 +21,7 @@
             </div>
 
             <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-view="dashboard">
+                <a href="#" class="nav-item active" data-view="dashboard" aria-current="page">
                     <i class="fa-solid fa-chart-pie"></i>
                     <span>Dashboard</span>
                 </a>
@@ -128,14 +128,14 @@
                     <h2>Sua Lista Completa</h2>
                     <div class="filter-group"
                         style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <label style="margin-bottom: 0; margin-right: 8px;">Tipo:</label>
+                        <label for="dash-filter-type" style="margin-bottom: 0; margin-right: 8px;">Tipo:</label>
                         <select id="dash-filter-type" style="width: auto; padding: 6px 12px; margin-right: 12px;">
                             <option value="all">Todos</option>
                             <option value="movie">Filmes</option>
                             <option value="series">Séries</option>
                         </select>
 
-                        <label style="margin-bottom: 0; margin-right: 8px;">Status:</label>
+                        <label for="dash-filter-status" style="margin-bottom: 0; margin-right: 8px;">Status:</label>
                         <select id="dash-filter-status" style="width: auto; padding: 6px 12px;">
                             <option value="all">Todos</option>
                             <option value="completed">Assistidos</option>
@@ -154,7 +154,7 @@
             <div class="view-container hidden" id="view-list">
                 <div class="filters-bar glass-panel">
                     <div class="filter-group">
-                        <label>Status:</label>
+                        <label for="filter-status">Status:</label>
                         <select id="filter-status">
                             <option value="all">Todos</option>
                             <option value="completed">Assistido</option>
@@ -164,7 +164,7 @@
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label>Ordenar por:</label>
+                        <label for="filter-sort">Ordenar por:</label>
                         <select id="filter-sort">
                             <option value="date_desc">Adicionado (Mais recentes)</option>
                             <option value="date_asc">Adicionado (Mais antigos)</option>
@@ -215,7 +215,7 @@
                     <p class="settings-desc">Para buscar dados e capas pelo código IMDB automaticamente, insira uma
                         Chave (API Key) v3 Auth do site <strong>The Movie Database (TMDB)</strong>.</p>
                     <div class="form-group">
-                        <label>Sua Chave de API</label>
+                        <label for="tmdb-api-key">Sua Chave de API</label>
                         <input type="password" id="tmdb-api-key" placeholder="Cole sua API Key aqui...">
                         <small style="display: block; margin-top: 8px; color: var(--text-secondary);">
                             Crie sua conta e gere uma chave gratuita em: <a
@@ -243,7 +243,7 @@
         <div class="modal-content glass-panel">
             <div class="modal-header">
                 <h2>Adicionar Título</h2>
-                <button class="btn-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+                <button class="btn-close" id="btn-close-modal" aria-label="Fechar Modal"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <div class="modal-body">
@@ -254,7 +254,7 @@
 
                         <div class="form-group glass-panel"
                             style="padding: 16px; margin-bottom: 24px; border: 1px dashed var(--primary-color); background: rgba(99, 102, 241, 0.05);">
-                            <label><i class="fa-brands fa-imdb"
+                            <label for="api-search-input"><i class="fa-brands fa-imdb"
                                     style="color: #f5c518; font-size: 18px; vertical-align: middle;"></i> Código IMDB
                                 (Autopreencher dados)</label>
                             <div style="display: flex; gap: 8px; margin-top: 8px;">
@@ -270,7 +270,7 @@
                             </div>
                             <div class="form-main-fields">
                                 <div class="form-group">
-                                    <label>Título</label>
+                                    <label for="form-title">Título</label>
                                     <input type="text" id="form-title" required>
                                 </div>
                                 <div class="form-row-compact">
@@ -283,12 +283,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group flex-1">
-                                        <label>Ano</label>
+                                        <label for="form-year">Ano</label>
                                         <input type="text" id="form-year" placeholder="Ex: 2024">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>URL da Capa (Imagem)</label>
+                                    <label for="form-poster">URL da Capa (Imagem)</label>
                                     <input type="url" id="form-poster" placeholder="https://...">
                                 </div>
                             </div>
@@ -300,7 +300,7 @@
                                         style="color: var(--primary-color);"></i> Progresso de Temporadas</label>
                                 <div style="display: flex; gap: 12px; align-items: center;">
                                     <div style="flex: 1;">
-                                        <label style="font-size: 11px; opacity: 0.7;">Assistidas</label>
+                                        <label for="form-seasons-watched" style="font-size: 11px; opacity: 0.7;">Assistidas</label>
                                         <div style="display: flex; gap: 4px;">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="dec" data-target="form-seasons-watched"
@@ -314,7 +314,7 @@
                                     </div>
                                     <div style="font-weight: bold; padding-top: 18px;">/</div>
                                     <div style="flex: 1;">
-                                        <label style="font-size: 11px; opacity: 0.7;">Total</label>
+                                        <label for="form-seasons-total" style="font-size: 11px; opacity: 0.7;">Total</label>
                                         <div style="display: flex; gap: 4px;">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="dec" data-target="form-seasons-total"
@@ -331,7 +331,7 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <label>Status</label>
+                            <label for="form-status">Status</label>
                             <select id="form-status" required>
                                 <option value="completed">Assistido / Concluído</option>
                                 <option value="watching">Assistindo Atualmente</option>
@@ -353,7 +353,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Sua Análise / Comentários</label>
+                            <label for="form-review">Sua Análise / Comentários</label>
                             <textarea id="form-review" rows="3" placeholder="O que você achou?"></textarea>
                         </div>
 
@@ -363,6 +363,22 @@
                             <button type="submit" class="btn btn-primary" id="btn-save-media">Salvar</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-content glass-panel" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="justify-content: center;">
+                <h2 id="confirm-title">Confirmar Ação</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message" style="margin-bottom: 24px; color: var(--text-secondary);"></p>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button class="btn btn-secondary" id="btn-confirm-cancel">Cancelar</button>
+                    <button class="btn btn-danger" id="btn-confirm-action">Confirmar</button>
                 </div>
             </div>
         </div>

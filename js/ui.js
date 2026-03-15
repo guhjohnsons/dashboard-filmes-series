@@ -42,6 +42,12 @@ class UIManager {
 
         // Toast
         this.toastEl = document.getElementById('toast');
+
+        // Confirm Modal
+        this.confirmModal = document.getElementById('confirm-modal');
+        this.btnConfirmAction = document.getElementById('btn-confirm-action');
+        this.btnConfirmCancel = document.getElementById('btn-confirm-cancel');
+        this.confirmMessage = document.getElementById('confirm-message');
     }
 
     bindEvents() {
@@ -62,6 +68,20 @@ class UIManager {
         // Close modal on outside click
         this.addModal.addEventListener('click', (e) => {
             if (e.target === this.addModal) this.closeModal();
+        });
+
+        this.confirmModal.addEventListener('click', (e) => {
+            if (e.target === this.confirmModal) this.closeConfirmModal();
+        });
+
+        this.btnConfirmCancel.addEventListener('click', () => this.closeConfirmModal());
+
+        // Keyboard Actions (Accessibility)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal();
+                this.closeConfirmModal();
+            }
         });
     }
 
@@ -103,6 +123,41 @@ class UIManager {
         this.addModal.classList.remove('active');
     }
 
+    openConfirmModal(message) {
+        this.confirmMessage.innerText = message;
+        this.confirmModal.classList.add('active');
+    }
+
+    closeConfirmModal() {
+        this.confirmModal.classList.remove('active');
+    }
+
+    async confirmAction(message) {
+        return new Promise((resolve) => {
+            this.openConfirmModal(message);
+            
+            const handleConfirm = () => {
+                this.closeConfirmModal();
+                cleanup();
+                resolve(true);
+            };
+
+            const handleCancel = () => {
+                this.closeConfirmModal();
+                cleanup();
+                resolve(false);
+            };
+
+            const cleanup = () => {
+                this.btnConfirmAction.removeEventListener('click', handleConfirm);
+                this.btnConfirmCancel.removeEventListener('click', handleCancel);
+            };
+
+            this.btnConfirmAction.addEventListener('click', handleConfirm);
+            this.btnConfirmCancel.addEventListener('click', handleCancel);
+        });
+    }
+
     renderDashboard(stats) {
         this.statTotalMovies.innerText = stats.totalMovies;
         this.statTotalSeries.innerText = stats.totalSeries;
@@ -122,7 +177,12 @@ class UIManager {
 
         this.dashboardGrid.innerHTML = '';
         if (stats.recentItems.length === 0) {
-            this.dashboardGrid.innerHTML = '<p style="color:var(--text-secondary); width: 100%;">Nenhum título adicionado ainda.</p>';
+            this.dashboardGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1; padding: 40px; text-align: center; width: 100%;">
+                    <i class="fa-regular fa-face-meh" style="font-size: 32px; margin-bottom: 12px; opacity: 0.4;"></i>
+                    <p style="color:var(--text-secondary);">Nenhum item adicionado no momento.</p>
+                </div>
+            `;
         } else {
             stats.recentItems.forEach(item => {
                 this.dashboardGrid.appendChild(this.createMediaCard(item));
@@ -178,15 +238,16 @@ class UIManager {
                 </div>
                 ` : ''}
             </div>
-            <button class="btn btn-danger w-100 btn-delete-item" style="border-radius:0; padding: 8px; font-size: 13px;">
+            <button class="btn btn-danger w-100 btn-delete-item">
                 <i class="fa-solid fa-trash"></i> Remover
             </button>
         `;
 
         const deleteBtn = div.querySelector('.btn-delete-item');
-        deleteBtn.addEventListener('click', (e) => {
+        deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (confirm('Tem certeza que deseja remover este título?')) {
+            const confirmed = await this.confirmAction(`Tem certeza que deseja remover "${item.title}"? Esta ação não pode ser desfeita.`);
+            if (confirmed) {
                 window.appStorage.removeItem(item.id);
                 window.appMain.refreshCurrentView();
                 this.showToast('Item removido com sucesso!');

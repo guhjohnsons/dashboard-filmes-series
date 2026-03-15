@@ -114,6 +114,7 @@ body {
 .nav-item.active {
     background: rgba(99, 102, 241, 0.1);
     color: var(--primary-color);
+    transform: translateX(4px);
 }
 
 .nav-item.active {
@@ -183,7 +184,7 @@ body {
 .btn-danger {
     background: rgba(239, 68, 68, 0.1);
     color: var(--accent-red);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .btn-danger:hover {
@@ -405,12 +406,14 @@ h1 {
 
 .media-card {
     position: relative;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
     transition: var(--transition);
     background: var(--bg-panel);
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
 }
 
 .media-card:hover {
@@ -428,6 +431,7 @@ h1 {
 
 .media-info {
     padding: 16px;
+    flex: 1;
 }
 
 .media-title {
@@ -688,6 +692,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .form-row {
@@ -877,3 +882,243 @@ input[type=number] {
 .danger-zone {
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
+
+/* ========================================================================= */
+/* UX/UI PRO MAX IMPROVEMENTS                                                */
+/* ========================================================================= */
+
+/* 1. Usabilidade de toque e teclado (Accessibility & Touch) */
+html {
+    touch-action: manipulation; /* Remove 300ms click delay no mobile */
+}
+
+*:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Feedback de clique aprimorado */
+.btn:active, .nav-item:active, .media-card:active {
+    transform: scale(0.97);
+}
+
+/* 1.1 Card Delete Button Hover Logic */
+.btn-delete-item {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.media-card:hover .btn-delete-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile specific: show delete button because there is no hover */
+@media (max-width: 768px) {
+    .btn-delete-item {
+        opacity: 1;
+        transform: translateY(0);
+        position: static;
+    }
+}
+
+/* Acessibilidade - reduz as transições se o usuário tiver no sistema */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* 2. Responsividade Mobile (Layout & Responsive) */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    /* Transformando Sidebar em Bottom Navigation Bar */
+    .sidebar {
+        width: 100%;
+        height: 72px;
+        bottom: 0;
+        top: auto;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        flex-direction: row;
+        padding: 0;
+        align-items: center;
+        justify-content: space-around;
+        background: rgba(15, 15, 20, 0.95);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .logo {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        margin-bottom: 72px;
+        padding: 24px 16px;
+    }
+    
+    .nav-menu {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+        margin: 0;
+    }
+    
+    .nav-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px;
+        font-size: 11px;
+        text-align: center;
+        flex: 1;
+    }
+    
+    .nav-item i {
+        font-size: 20px;
+    }
+    
+    .nav-item.active::before {
+        display: none; /* remove sidebar indicator */
+    }
+    
+    .nav-item.active {
+        background: transparent;
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+    
+    .nav-item.active i {
+        transform: translateY(-2px);
+    }
+    
+    .nav-divider {
+        display: none;
+    }
+    
+    /* Transformando o botão Adicionar em um FAB (Floating Action Button) */
+    .sidebar-footer {
+        position: fixed;
+        right: 20px;
+        bottom: 90px;
+        margin-top: 0;
+        z-index: 100;
+    }
+    
+    .btn-add-new {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        padding: 0;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
+    }
+    
+    .btn-add-new span {
+        display: none;
+    }
+    
+    .btn-add-new i {
+        font-size: 24px;
+        margin: 0;
+    }
+    
+    /* Formatação dos cabeçalhos e grid */
+    .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    h1 {
+        font-size: 26px;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .search-bar input {
+        width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .status-summary {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+    
+    .section-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+    
+    .filter-group {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+    }
+    
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    /* Modal format optimizations */
+    .modal-content {
+        padding: 24px 16px;
+        border-radius: 16px 16px 0 0;
+        transform: translateY(100%) scale(1);
+        align-self: flex-end;
+        max-height: 85vh;
+        margin: 0;
+    }
+    
+    .modal-overlay.active .modal-content {
+        transform: translateY(0) scale(1);
+    }
+    
+    .form-row, .form-row-compact {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .form-cover-preview {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 8px;
+    }
+    
+    .toast {
+        bottom: 80px;
+        right: 16px;
+        left: 16px;
+        text-align: center;
+    }
+}

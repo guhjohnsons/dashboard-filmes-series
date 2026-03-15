@@ -86,8 +86,9 @@ class AppMain {
             });
         });
 
-        document.getElementById('btn-clear-data').addEventListener('click', () => {
-            if (confirm('Apagar TODOS OS DADOS de filmes e séries? Isso não pode ser desfeito!')) {
+        document.getElementById('btn-clear-data').addEventListener('click', async () => {
+            const confirmed = await this.ui.confirmAction('Apagar TODOS OS DADOS de filmes e séries? Esta ação é irreversível!');
+            if (confirmed) {
                 this.storage.clearAll();
                 this.refreshCurrentView();
                 this.ui.showToast('Todos os dados foram apagados.');
@@ -134,7 +135,12 @@ class AppMain {
         const grid = document.getElementById('dashboard-recent-grid');
         grid.innerHTML = '';
         if (recentItems.length === 0) {
-            grid.innerHTML = '<p style="color:var(--text-secondary); width: 100%; text-align: center; padding: 24px;">Nenhum item adicionado.</p>';
+            grid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1; padding: 40px; text-align: center; width: 100%;">
+                    <i class="fa-regular fa-face-meh" style="font-size: 32px; margin-bottom: 12px; opacity: 0.4;"></i>
+                    <p style="color:var(--text-secondary);">Nenhum item adicionado no momento.</p>
+                </div>
+            `;
         } else {
             recentItems.forEach(item => {
                 grid.appendChild(this.ui.createMediaCard(item));
