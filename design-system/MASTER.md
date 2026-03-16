@@ -1,6 +1,6 @@
-# CineGu Design System & UX Rules
+# Cine Design System & UX Rules
 
-Este documento define o sistema de design e as regras de experiência do usuário para o CineGu Dashboard, baseado na skill **UI/UX Pro Max**.
+Este documento define o sistema de design e as regras de experiência do usuário para o Cine Dashboard, baseado na skill **UI/UX Pro Max**.
 
 ## 🎨 Identidade Visual
 - **Estilo**: Glassmorphism (Painéis translucidos com desfoque).

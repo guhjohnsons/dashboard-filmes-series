@@ -53,7 +53,15 @@ class AppMain {
         // Filtering & Sorting
         document.getElementById('filter-status').addEventListener('change', () => this.refreshCurrentView());
         document.getElementById('filter-sort').addEventListener('change', () => this.refreshCurrentView());
-        document.getElementById('local-search').addEventListener('input', () => this.refreshCurrentView());
+
+        // Debounce setup for local search
+        let searchTimeout;
+        document.getElementById('local-search').addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.refreshCurrentView();
+            }, 300); // 300ms delay
+        });
 
         // Dashboard Filter
         document.getElementById('dash-filter-type').addEventListener('change', () => this.refreshDashboard());
@@ -130,7 +138,7 @@ class AppMain {
         }
 
         items.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
-        const recentItems = items.slice(0, 100); // Increased from 10 to 100
+        const recentItems = items.slice(0, 54);
 
         const grid = document.getElementById('dashboard-recent-grid');
         grid.innerHTML = '';

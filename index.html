@@ -17,7 +17,7 @@
         <aside class="sidebar">
             <div class="logo">
                 <i class="fa-solid fa-film"></i>
-                <span>CineGu</span>
+                <span>Cine</span>
             </div>
 
             <nav class="nav-menu">
@@ -304,12 +304,12 @@
                                         <div style="display: flex; gap: 4px;">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="dec" data-target="form-seasons-watched"
-                                                style="padding: 4px 8px; flex: 0 0 auto;">-</button>
+                                                style="padding: 4px 8px; flex: 0 0 auto;" aria-label="Diminuir temporadas assistidas">-</button>
                                             <input type="number" id="form-seasons-watched" min="0" value="0"
-                                                style="width: 100%; text-align: center; padding: 4px;">
+                                                style="width: 100%; text-align: center; padding: 4px;" aria-label="Temporadas assistidas">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="inc" data-target="form-seasons-watched"
-                                                style="padding: 4px 8px; flex: 0 0 auto;">+</button>
+                                                style="padding: 4px 8px; flex: 0 0 auto;" aria-label="Aumentar temporadas assistidas">+</button>
                                         </div>
                                     </div>
                                     <div style="font-weight: bold; padding-top: 18px;">/</div>
@@ -318,12 +318,12 @@
                                         <div style="display: flex; gap: 4px;">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="dec" data-target="form-seasons-total"
-                                                style="padding: 4px 8px; flex: 0 0 auto;">-</button>
+                                                style="padding: 4px 8px; flex: 0 0 auto;" aria-label="Diminuir total de temporadas">-</button>
                                             <input type="number" id="form-seasons-total" min="1" value="1"
-                                                style="width: 100%; text-align: center; padding: 4px;">
+                                                style="width: 100%; text-align: center; padding: 4px;" aria-label="Total de temporadas">
                                             <button type="button" class="btn btn-secondary btn-season-control"
                                                 data-action="inc" data-target="form-seasons-total"
-                                                style="padding: 4px 8px; flex: 0 0 auto;">+</button>
+                                                style="padding: 4px 8px; flex: 0 0 auto;" aria-label="Aumentar total de temporadas">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -377,8 +377,8 @@
             <div class="modal-body">
                 <p id="confirm-message" style="margin-bottom: 24px; color: var(--text-secondary);"></p>
                 <div style="display: flex; gap: 12px; justify-content: center;">
-                    <button class="btn btn-secondary" id="btn-confirm-cancel">Cancelar</button>
-                    <button class="btn btn-danger" id="btn-confirm-action">Confirmar</button>
+                    <button class="btn btn-secondary" id="btn-confirm-cancel" aria-label="Cancelar ação">Cancelar</button>
+                    <button class="btn btn-danger" id="btn-confirm-action" aria-label="Confirmar ação">Confirmar</button>
                 </div>
             </div>
         </div>

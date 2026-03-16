@@ -184,9 +184,11 @@ class UIManager {
                 </div>
             `;
         } else {
+            const fragment = document.createDocumentFragment();
             stats.recentItems.forEach(item => {
-                this.dashboardGrid.appendChild(this.createMediaCard(item));
+                fragment.appendChild(this.createMediaCard(item));
             });
+            this.dashboardGrid.appendChild(fragment);
         }
     }
 
@@ -198,9 +200,11 @@ class UIManager {
         } else {
             this.listGrid.classList.remove('hidden');
             this.emptyState.classList.add('hidden');
+            const fragment = document.createDocumentFragment();
             items.forEach(item => {
-                this.listGrid.appendChild(this.createMediaCard(item));
+                fragment.appendChild(this.createMediaCard(item));
             });
+            this.listGrid.appendChild(fragment);
         }
     }
 
@@ -209,7 +213,17 @@ class UIManager {
         div.className = 'media-card';
         div.dataset.id = item.id;
 
-        const posterUrl = item.poster || 'https://via.placeholder.com/200x300?text=Sem+Capa';
+        const letter = item.title ? item.title.charAt(0).toUpperCase() : '?';
+        const colors = ['#f43f5e', '#8b5cf6', '#0ea5e9', '#10b981', '#f59e0b', '#ec4899', '#6366f1'];
+        const colorIndex = item.title ? item.title.length % colors.length : 0;
+        const fallbackBg = colors[colorIndex];
+        
+        let posterHtml = '';
+        if (item.poster) {
+            posterHtml = `<img class="media-poster" src="${item.poster}" alt="${item.title}" onerror="this.onerror=null; this.outerHTML='<div class=\\'media-poster\\' style=\\'background: linear-gradient(135deg, ${fallbackBg}, #1e1e2e); display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: bold; color: rgba(255,255,255,0.5);\\'>${letter}</div>'">`;
+        } else {
+            posterHtml = `<div class="media-poster" style="background: linear-gradient(135deg, ${fallbackBg}, #1e1e2e); display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: bold; color: rgba(255,255,255,0.5);">${letter}</div>`;
+        }
 
         let statusClass = 'status-watching';
         let statusLabel = 'Assistindo';
@@ -219,7 +233,7 @@ class UIManager {
         if (item.status === 'dropped') { statusClass = 'status-dropped'; statusLabel = 'Desisti'; }
 
         div.innerHTML = `
-            <img class="media-poster" src="${posterUrl}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/200x300?text=Sem+Capa'">
+            ${posterHtml}
             <div class="status-badge ${statusClass}">${statusLabel}</div>
             <div class="media-info">
                 <div class="media-title" title="${item.title}">${item.title} ${item.year ? `<span style="font-size: 0.85em; opacity: 0.7; font-weight: 400;">(${item.year})</span>` : ''}</div>

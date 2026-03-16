@@ -12,7 +12,7 @@ class StorageManager {
         const legacyKey = 'cinedash_data';
 
         try {
-            // Tenta carregar dados já migrados (CineGu)
+            // Tenta carregar dados já migrados (Cine)
             const raw = localStorage.getItem(this.STORAGE_KEY);
             if (raw) {
                 return JSON.parse(raw);

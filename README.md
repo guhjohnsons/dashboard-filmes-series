@@ -1,8 +1,8 @@
-# CineGu - Dashboard de Filmes e Séries 🎬
+# Cine - Dashboard de Filmes e Séries 🎬
 
-CineGu é um dashboard moderno e intuitivo para gerenciar sua lista pessoal de filmes e séries. O projeto foca em oferecer uma experiência premium (Glassmorphism), alta performance e total privacidade, mantendo todos os seus dados localmente no navegador.
+Cine é um dashboard moderno e intuitivo para gerenciar sua lista pessoal de filmes e séries. O projeto foca em oferecer uma experiência premium (Glassmorphism), alta performance e total privacidade, mantendo todos os seus dados localmente no navegador.
 
-![Aestethic Preview](https://via.placeholder.com/1200x600/0a0a0f/6366f1?text=CineGu+Glassmorphism+Interface)
+![Aestethic Preview](https://via.placeholder.com/1200x600/0a0a0f/6366f1?text=Cine+Glassmorphism+Interface)
 
 ## ✨ Funcionalidades Principais
 
@@ -27,7 +27,7 @@ CineGu é um dashboard moderno e intuitivo para gerenciar sua lista pessoal de f
 
 ## 🚀 Como Rodar o Projeto
 
-Como o CineGu é um projeto de frontend estático, não há necessidade de um servidor de backend ou instalação complexa.
+Como o Cine é um projeto de frontend estático, não há necessidade de um servidor de backend ou instalação complexa.
 
 ### Pré-requisitos
 - Um navegador moderno (Chrome, Firefox, Edge ou Safari).

@@ -844,23 +844,34 @@ input[type=number] {
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 9999;
-    animation: slideIn 0.3s ease forwards;
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(120%);
         opacity: 0;
     }
-
     to {
         transform: translateX(0);
         opacity: 1;
     }
 }
 
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
 .toast.hidden {
-    display: none !important;
+    display: block !important; /* Mudar para block para suportar animação de saída */
+    animation: slideOut 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
 
 /* Settings */
