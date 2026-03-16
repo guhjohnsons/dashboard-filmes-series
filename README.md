@@ -2,7 +2,10 @@
 
 Cine é um dashboard moderno e intuitivo para gerenciar sua lista pessoal de filmes e séries. O projeto foca em oferecer uma experiência premium (Glassmorphism), alta performance e total privacidade, mantendo todos os seus dados localmente no navegador.
 
+<<<<<<< HEAD
 ![Aestethic Preview](https://via.placeholder.com/1200x600/0a0a0f/6366f1?text=Cine+Glassmorphism+Interface)
+=======
+>>>>>>> 3bd1135f1f4b5fee61c3c9bf14fb4d251c58fd9e
 
 ## ✨ Funcionalidades Principais
 
