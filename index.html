@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -52,10 +53,14 @@
         <main class="main-content">
             <header class="top-header">
                 <h1 id="page-title">Dashboard</h1>
-                <div class="header-actions">
+                <div class="header-actions" style="display:flex;align-items:center;gap:12px;">
+                    <button id="btn-theme-toggle" aria-label="Alternar tema">
+                        <i class="fa-solid fa-sun"></i>
+                        <span>Claro</span>
+                    </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="local-search" placeholder="Buscar na minha lista...">
+                        <input type="text" id="local-search" placeholder="Buscar na minha lista..." aria-label="Buscar">
                     </div>
                 </div>
             </header>
@@ -123,7 +128,35 @@
                     </div>
                 </div>
 
-                <!-- Recent Additions -->
+                <!-- Gráficos -->
+                <div id="charts-section">
+                    <div class="chart-card glass-panel">
+                        <h4>Filmes vs Séries</h4>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart-distribution" aria-label="Distribuição de filmes e séries"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card glass-panel">
+                        <h4>Status por Tipo</h4>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart-status" aria-label="Status por tipo"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card glass-panel">
+                        <h4>Distribuição de Avaliações</h4>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart-ratings" aria-label="Distribuição de avaliações"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card glass-panel">
+                        <h4>Consumo Mensal</h4>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart-monthly" aria-label="Adicionados por mês"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sua lista completa -->
                 <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>Sua Lista Completa</h2>
                     <div class="filter-group"
@@ -145,9 +178,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="media-grid" id="dashboard-recent-grid">
-                    <!-- Cards will be injected here -->
-                </div>
+                <div class="media-grid" id="dashboard-recent-grid"></div>
             </div>
 
             <!-- List View: Movies & Series -->
@@ -258,7 +289,7 @@
                                     style="color: #f5c518; font-size: 18px; vertical-align: middle;"></i> Código IMDB
                                 (Autopreencher dados)</label>
                             <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                <input type="text" id="api-search-input" placeholder="Ex: tt4154664" style="flex:1;">
+                                <input type="text" id="api-search-input" placeholder="Título ou código IMDB (tt...)" style="flex:1;" aria-label="Buscar por nome ou IMDB ID">
                                 <button type="button" class="btn btn-primary" id="btn-api-search"
                                     style="white-space: nowrap;"><i class="fa-solid fa-magnifying-glass"></i> Buscar
                                     Dados</button>
@@ -384,7 +415,9 @@
         </div>
     </div>
 
-    <!-- Notification Toast -->
+    <!-- Toast Container (múltiplos toasts empilháveis) -->
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+    <!-- Toast antigo (fallback) -->
     <div id="toast" class="toast hidden"></div>
 
     <script src="js/storage.js"></script>

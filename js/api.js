@@ -84,6 +84,46 @@ class ApiService {
             throw error;
         }
     }
+    async searchByTitle(query) {
+        if (!this.hasApiKey()) {
+            throw new Error('Chave TMDB não configurada! Vá em "Backup & Dados" e insira sua API Key.');
+        }
+
+        const apiKey = this.getApiKey();
+        const encode = encodeURIComponent(query);
+
+        const [moviesResp, tvResp] = await Promise.all([
+            fetch(`${this.baseUrl}/search/movie?api_key=${apiKey}&query=${encode}&language=pt-BR&page=1`),
+            fetch(`${this.baseUrl}/search/tv?api_key=${apiKey}&query=${encode}&language=pt-BR&page=1`)
+        ]);
+
+        const movies = moviesResp.ok ? (await moviesResp.json()).results || [] : [];
+        const tvs    = tvResp.ok    ? (await tvResp.json()).results    || [] : [];
+
+        const mapped = [
+            ...movies.map(m => ({
+                type: 'movie',
+                title: (m.title !== m.original_title && m.original_title)
+                    ? `${m.title} (${m.original_title})`
+                    : m.title,
+                poster: m.poster_path ? `${this.imageBaseUrl}${m.poster_path}` : '',
+                year: m.release_date ? m.release_date.substring(0, 4) : '',
+                popularity: m.popularity || 0
+            })),
+            ...tvs.map(t => ({
+                type: 'series',
+                title: (t.name !== t.original_name && t.original_name)
+                    ? `${t.name} (${t.original_name})`
+                    : t.name,
+                poster: t.poster_path ? `${this.imageBaseUrl}${t.poster_path}` : '',
+                year: t.first_air_date ? t.first_air_date.substring(0, 4) : '',
+                popularity: t.popularity || 0,
+                totalSeasons: 0
+            }))
+        ];
+
+        return mapped.sort((a, b) => b.popularity - a.popularity);
+    }
 }
 
 window.appApi = new ApiService();

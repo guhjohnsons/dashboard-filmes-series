@@ -238,7 +238,7 @@ class AppMain {
     async handleApiSearch() {
         const query = document.getElementById('api-search-input').value.trim();
         if (!query) {
-            this.ui.showToast('Digite um código IMDB válido!', true);
+            this.ui.showToast('Digite um título ou código IMDB!', true);
             return;
         }
 
@@ -247,15 +247,79 @@ class AppMain {
         btn.disabled = true;
 
         try {
-            const result = await this.api.searchByImdb(query);
-            this.autoFillForm(result);
-            this.ui.showToast('Dados preenchidos!');
+            let result;
+            // Se começar com 'tt' é um IMDB ID; caso contrário busca por nome
+            if (query.startsWith('tt')) {
+                result = await this.api.searchByImdb(query);
+                this.autoFillForm(result);
+                this.ui.showToast('Dados preenchidos!');
+            } else {
+                // Busca por nome — mostra dropdown de resultados
+                const results = await this.api.searchByTitle(query);
+                if (results && results.length > 0) {
+                    this.showTmdbResults(results);
+                } else {
+                    this.ui.showToast('Nenhum resultado encontrado para "' + query + '".', true);
+                }
+            }
         } catch (error) {
             this.ui.showToast(error.message || 'Erro ao buscar no TMDB.', true);
         } finally {
-            btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Buscar Dados';
+            btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Buscar';
             btn.disabled = false;
         }
+    }
+
+    showTmdbResults(results) {
+        // Remove resultados anteriores
+        const existing = document.getElementById('tmdb-results-list');
+        if (existing) existing.remove();
+
+        const container = document.createElement('div');
+        container.id = 'tmdb-results-list';
+        container.className = 'tmdb-results';
+
+        results.slice(0, 6).forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'tmdb-result-item';
+
+            // Sanitize: usar textContent, não innerHTML para dados da API
+            const thumb = item.poster
+                ? `<img src="${item.poster}" alt="" loading="lazy" onerror="this.style.display='none'">`
+                : `<div class="tmdb-result-thumb-fallback">${item.title.charAt(0)}</div>`;
+
+            div.innerHTML = `
+                <div class="tmdb-result-thumb">${thumb}</div>
+                <div class="tmdb-result-info">
+                    <strong class="tmdb-result-title"></strong>
+                    <span class="tmdb-result-meta"></span>
+                </div>
+            `;
+            // Valores via textContent para evitar XSS
+            div.querySelector('.tmdb-result-title').textContent = item.title;
+            div.querySelector('.tmdb-result-meta').textContent = `${item.type === 'movie' ? 'Filme' : 'Série'} · ${item.year || 'S/A'}`;
+
+            div.addEventListener('click', () => {
+                this.autoFillForm(item);
+                container.remove();
+                this.ui.showToast('Dados preenchidos!');
+            });
+            container.appendChild(div);
+        });
+
+        // Inserir abaixo do campo de busca
+        const searchBox = document.getElementById('api-search-input').closest('.form-group');
+        searchBox.style.position = 'relative';
+        searchBox.appendChild(container);
+
+        // Fecha ao clicar fora
+        const closeHandler = (e) => {
+            if (!container.contains(e.target)) {
+                container.remove();
+                document.removeEventListener('click', closeHandler, true);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeHandler, true), 10);
     }
 
     handleSaveMedia(e) {
@@ -330,7 +394,7 @@ class AppMain {
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
         const today = new Date();
         const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-        const backupFilename = `cinegu_backup_${dateStr}.json`;
+        const backupFilename = `cine_backup_${dateStr}.json`;
         this.downloadFile(dataBlob, backupFilename);
     }
 
@@ -361,7 +425,7 @@ class AppMain {
         const dataBlob = new Blob([dataStr], { type: 'text/csv;charset=utf-8;' });
         const today = new Date();
         const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-        const exportFilename = `cinegu_export_${dateStr}.csv`;
+        const exportFilename = `cine_export_${dateStr}.csv`;
         this.downloadFile(dataBlob, exportFilename);
     }
 
